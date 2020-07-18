@@ -12,6 +12,9 @@ $ip = $_SERVER['REMOTE_ADDR'];
 
 exec("ssh $pfsense_ssh pfSsh.php playback updateNat $codpes", $fw);
 $fw = json_decode($fw[0], true);
+$log = date('Y-m-d H:i:s') . '; ' . $codpes .'-'.$username.'; from=' . $ip;
+file_put_contents(__DIR__ . '/../log/access.log', $log . PHP_EOL, FILE_APPEND | LOCK_EX);
+
 ?>
 <html>
 
