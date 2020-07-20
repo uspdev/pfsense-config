@@ -1,5 +1,12 @@
 {
     "require": {
-        "uspdev/senhaunica": "^1.2"
+        "uspdev/senhaunica": "^1.2",
+        "vlucas/phpdotenv": "^5.1",
+        "raelgc/template": "^2.2"
+    },
+    "autoload": {
+        "psr-4" : {
+            "Uspdev\\Pfconfig\\" : "src"
+        }
     }
 }

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Firewall do SET</title>
+    <meta charset="UTF-8">
+    <style>
+        table,
+        th,
+        td {
+            border: 1px solid black;
+            border-collapse: collapse;
+            padding: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Configurador do firewall do SET</h1>
+    Usuário: {usr->codpes} - {usr->nome}<br>
+    Meu ip atual: {usr->ip}<br>
+    <br>
+
+    <!-- BEGIN block_nat -->
+    Regras de NAT
+    <table>
+        <thead>
+            <tr>
+                <td>Origem</td>
+                <td>Destino</td>
+                <td>Descrição</td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- BEGIN block_nat_rule -->
+            <tr>
+                <td>{nat->source->address}</td>
+                <td>{nat->destination->address}:{nat->destination->port}</td>
+                <td>{nat->descr}</td>
+                <td>
+                    <!-- BEGIN block_nat_rule_atualizar -->
+                    <form method="POST">
+                        <input type="hidden" name="descr" value="{nat->descr}">
+                        <input type="hidden" name="acao" value="atualizarNat">
+                        <button type="submit" name="submit" value="Atualizar">Atualizar</button>
+                    </form>
+                    <!-- END block_nat_rule_atualizar -->
+                    <!-- BEGIN block_nat_rule_ok -->
+                    OK
+                    <!-- END block_nat_rule_ok -->
+                </td>
+            </tr>
+            <!-- END block_nat_rule -->
+        </tbody>
+    </table>
+    <!-- END block_nat -->
+    Sem regras de NAT para mostrar.
+    <!-- FINALLY block_nat -->
+    <br>
+    <!-- BEGIN block_filter -->
+    Regras de FILTER
+    <table>
+        <thead>
+            <tr>
+                <td>Origem</td>
+                <td>Destino</td>
+                <td>Descrição</td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- BEGIN block_filter_rule -->
+            <tr>
+                <td>{filter->source->address}</td>
+                <td>{filter->destination->address}</td>
+                <td>{filter->descr}</td>
+                <td>
+                    <!-- BEGIN block_filter_rule_atualizar -->
+                    <form method="POST">
+                        <input type="hidden" name="descr" value="{filter->descr}">
+                        <input type="hidden" name="acao" value="atualizarFilter">
+                        <button type="submit" name="submit" value="Atualizar">Atualizar</button>
+                    </form>
+                    <!-- <a href="atualizar.php">Atualizar</a> -->
+                    <!-- END block_filter_rule_atualizar -->
+                    <!-- BEGIN block_filter_rule_ok -->
+                    OK
+                    <!-- END block_filter_rule_ok -->
+                </td>
+            </tr>
+            <!-- END block_filter_rule -->
+        </tbody>
+    </table>
+    <!-- END block_filter -->
+
+    <br>
+    <a href="logout/">Sair</a><br>
+    <br>
+</body>
+
+</html>

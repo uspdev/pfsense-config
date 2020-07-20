@@ -1,44 +1,53 @@
 <?php
-require_once __DIR__ . '/../config.php';
+require_once __DIR__ . '/../app/bootstrap.php';
 
-if (!isset($_SESSION['user'])) {
-    header('Location:login/');
-    exit;
+use raelgc\view\Template;
+use Uspdev\Pfconfig\Pfsense;
+
+$usr = is_auth();
+
+if (!empty($_POST['acao'])) {
+    switch ($_POST['acao']) {
+        case 'atualizarNat':
+            Pfsense::atualizarNat($usr, $_POST['descr']);
+            header('Location:index.php');
+            break;
+        case 'atualizarFilter':
+            Pfsense::atualizarFilter($usr, $_POST['descr']);
+            header('Location:index.php');
+            break;
+    }
 }
 
-$codpes = $_SESSION['user']['loginUsuario'];
-$username = $_SESSION['user']['nomeUsuario'];
-$ip = $_SERVER['REMOTE_ADDR'];
+$tpl = new Template('../tpl/index.html');
+$tpl->usr = $usr;
 
-exec("ssh $pfsense_ssh pfSsh.php playback updateNat $codpes", $fw);
-$fw = json_decode($fw[0], true);
-$log = date('Y-m-d H:i:s') . '; ' . $codpes . '-' . $username . '; from=' . $ip;
-file_put_contents(__DIR__ . '/../log/access.log', $log . PHP_EOL, FILE_APPEND | LOCK_EX);
+$nat = Pfsense::listarNat($usr->codpes);
+foreach ($nat as $rule) {
+    //print_r($rule);//exit;
+    //$rule['descr'] = preg_replace("/\(.*?\)/","(".date('Y-m-d').")",$rule['descr']);
+    $tpl->nat = json_decode(json_encode($rule));
+    if ($rule['source']['address'] == $usr->ip) {
+        $tpl->block('block_nat_rule_ok');
+    } else {
+        $tpl->block('block_nat_rule_atualizar');
+    }
+    $tpl->block('block_nat_rule');
+}
 
-?>
-<!DOCTYPE html>
-<html>
-<head>
-<title>Firewall do SET</title>
-    <meta charset="UTF-8">
-</head>
+$filter = Pfsense::listarFilter($usr->codpes);
+foreach ($filter as $rule) {
+    //print_r($rule);//exit;
 
-<body>
-    <h1>Configurador do firewall do SET</h1>
-    Usuário: <?php echo $codpes ?> - <?php echo $username ?><br>
-    Meu ip atual: <?php echo $ip ?><br>
-    <br>
-    <?php if (empty($fw)) {?>
-    Sem regras para mostrar<br>
-    <?php } else {?>
-    <?php foreach ($fw as $rule) {?>
-    Origem: <?php echo $rule['source']['address']; ?><br>
-    Destino: <?php echo $rule['destination']['address']; ?>:<?php echo $rule['destination']['port']; ?><br>
-    <?php }?>
-    <a href="atualizar.php">Atualizar</a><br>
-    <br>
-    <a href="logout/">Sair</a>
-    <?php }?>
-</body>
+    $tpl->filter = json_decode(json_encode($rule));
+    if (strpos($rule['descr'], 'NAT ') !== 0) {
+        if ($rule['source']['address'] == $usr->ip) {
+            $tpl->block('block_filter_rule_ok');
+        } else {
+            $tpl->block('block_filter_rule_atualizar');
+        }
+    }
+    $tpl->block('block_filter_rule');
+}
 
-</html>
+$tpl->show();
