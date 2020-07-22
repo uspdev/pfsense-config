@@ -8,10 +8,10 @@ Ele procura por regras que contenham o codpes do usuário e atualiza o source ip
 
 * clonar o repositório
 * rodar `composer install`
-* copiar `config.sample.php` para `config.php`  e configurar
+* copiar `.env.sampl` para `.env`  e configurar
 * ajustar permissoes na pasta `log/`
 * O servidor que hospeda o sistema deve ter acesso ssh ao firewall pfsense
 * O acesso ao pfsense deve ser com chave
-* No pfsense deve ser colocado o script pfsense/updateNat em /etc/phpshellsessions/
-* as Regras de nat no pfsense devem conter o codpes do usuário para serem encontrados
-* O usuário pode ter mais de uma regra de NAT que todos serão atualizados
+* No pfsense deve ser colocado o script `pfsense/updateNat` em `/etc/phpshellsessions/` mas sem a tag `<?php`
+* as Regras de nat no pfsense devem conter o codpes do usuário para serem encontrados e `()` para inserir data. Sugestão: `codpes () outros comentários`
+* O usuário pode ter mais de uma regra de NAT que todos poderão ser atualizados

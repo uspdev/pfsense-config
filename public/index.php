@@ -16,6 +16,12 @@ if (!empty($_POST['acao'])) {
             Pfsense::atualizarFilter($usr, $_POST['descr']);
             header('Location:index.php');
             break;
+        case 'obterConfig':
+            if ($usr->admin) {
+                Pfsense::obterConfig(true);
+                header('Location:index.php');
+            }
+            break;
     }
 }
 
@@ -24,8 +30,6 @@ $tpl->usr = $usr;
 
 $nat = Pfsense::listarNat($usr->codpes);
 foreach ($nat as $rule) {
-    //print_r($rule);//exit;
-    //$rule['descr'] = preg_replace("/\(.*?\)/","(".date('Y-m-d').")",$rule['descr']);
     $tpl->nat = json_decode(json_encode($rule));
     if ($rule['source']['address'] == $usr->ip) {
         $tpl->block('block_nat_rule_ok');
@@ -37,8 +41,6 @@ foreach ($nat as $rule) {
 
 $filter = Pfsense::listarFilter($usr->codpes);
 foreach ($filter as $rule) {
-    //print_r($rule);//exit;
-
     $tpl->filter = json_decode(json_encode($rule));
     if (strpos($rule['descr'], 'NAT ') !== 0) {
         if ($rule['source']['address'] == $usr->ip) {
@@ -49,5 +51,12 @@ foreach ($filter as $rule) {
     }
     $tpl->block('block_filter_rule');
 }
+
+if ($usr->admin) {
+    $tpl->access = file_get_contents(__DIR__ . '/../log/access.log');
+    $tpl->update = file_get_contents(__DIR__ . '/../log/update.log');
+    $tpl->block('block_admin');
+}
+
 
 $tpl->show();

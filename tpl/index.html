@@ -93,10 +93,24 @@
         </tbody>
     </table>
     <!-- END block_filter -->
-
     <br>
     <a href="logout/">Sair</a><br>
     <br>
+
+    <!-- BEGIN block_admin -->
+    <h2>Bloco do administrador</h2>
+    <form method="POST">
+        <input type="hidden" name="acao" value="obterConfig">
+        <button type="submit" name="submit" value="Atualizar">Atualizar cache de regras</button>
+    </form>
+    <h3>Logs de acesso</h3>
+    <pre>{access}</pre>
+
+    <h3>Logs de updates</h3>
+    <pre>{update}</pre>
+    <!-- END block_admin -->
+
+
 </body>
 
 </html>
