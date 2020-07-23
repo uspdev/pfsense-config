@@ -42,14 +42,15 @@ foreach ($nat as $rule) {
 $filter = Pfsense::listarFilter($usr->codpes);
 foreach ($filter as $rule) {
     $tpl->filter = json_decode(json_encode($rule));
+    // somente as regras que não são automáticas
     if (strpos($rule['descr'], 'NAT ') !== 0) {
         if ($rule['source']['address'] == $usr->ip) {
             $tpl->block('block_filter_rule_ok');
         } else {
             $tpl->block('block_filter_rule_atualizar');
         }
+        $tpl->block('block_filter_rule');
     }
-    $tpl->block('block_filter_rule');
 }
 
 if ($usr->admin) {
