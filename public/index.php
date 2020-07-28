@@ -9,7 +9,7 @@ $usr = is_auth();
 if (!empty($_POST['acao'])) {
     switch ($_POST['acao']) {
         case 'atualizarNat':
-            Pfsense::atualizarNat($usr, $_POST['descr']);
+            Pfsense::atualizarNat($usr, $_POST['associated-rule-id']);
             header('Location:index.php');
             break;
         case 'atualizarFilter':
@@ -30,8 +30,9 @@ $tpl->usr = $usr;
 
 $nat = Pfsense::listarNat($usr->codpes);
 foreach ($nat as $rule) {
-    $tpl->nat = json_decode(json_encode($rule));
-    if ($rule['source']['address'] == $usr->ip) {
+    $tpl->nat = $rule;
+    //print_r($rule);exit;
+    if ($rule->source->address == $usr->ip) {
         $tpl->block('block_nat_rule_ok');
     } else {
         $tpl->block('block_nat_rule_atualizar');
@@ -41,10 +42,10 @@ foreach ($nat as $rule) {
 
 $filter = Pfsense::listarFilter($usr->codpes);
 foreach ($filter as $rule) {
-    $tpl->filter = json_decode(json_encode($rule));
+    $tpl->filter = $rule;
     // somente as regras que não são automáticas
-    if (strpos($rule['descr'], 'NAT ') !== 0) {
-        if ($rule['source']['address'] == $usr->ip) {
+    if (strpos($rule->descr, 'NAT ') !== 0) {
+        if ($rule->source->address == $usr->ip) {
             $tpl->block('block_filter_rule_ok');
         } else {
             $tpl->block('block_filter_rule_atualizar');
