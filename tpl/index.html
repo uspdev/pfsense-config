@@ -27,6 +27,7 @@
         <thead>
             <tr>
                 <td>Origem</td>
+                <td>Porta do firewall</td>
                 <td>Destino</td>
                 <td>Descrição</td>
                 <td></td>
@@ -37,6 +38,7 @@
             <tr>
                 <td>{nat->source->address}</td>
                 <td>{nat->destination->address}:{nat->destination->port}</td>
+                <td>{nat->target}:{nat->local_port}</td>
                 <td>{nat->descr}</td>
                 <td>
                     <!-- BEGIN block_nat_rule_atualizar -->

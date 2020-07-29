@@ -42,6 +42,7 @@ foreach ($nat as $rule) {
 
 $filter = Pfsense::listarFilter($usr->codpes);
 foreach ($filter as $rule) {
+    //print_r($rule);exit;
     $tpl->filter = $rule;
     // somente as regras que não são automáticas
     if (strpos($rule->descr, 'NAT ') !== 0) {
