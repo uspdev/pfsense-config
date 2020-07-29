@@ -1,0 +1,31 @@
+<style>
+    table,
+    th,
+    td {
+        border: 1px solid black;
+        border-collapse: collapse;
+        padding: 5px;
+    }
+</style>
+<table>
+    <thead>
+        <tr>
+            <td>origem</td>
+            <td>destino</td>
+            <td>Interno</td>
+            <td>data</td>
+            <td>descricao</td>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- BEGIN block_nat_rule -->
+        <tr>
+            <td>{rule->source->address} {rule->fw}</td>
+            <td>{rule->destination->address}:{rule->destination->port}</td>
+            <td>{rule->target}</td>
+            <td>{rule->date}</td>
+            <td>{rule->descr}</td>
+        </tr>
+        <!-- END block_nat_rule -->
+    </tbody>
+</table>
