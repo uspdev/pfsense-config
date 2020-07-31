@@ -43,7 +43,10 @@ foreach ($nat as $rule) {
 
 $filter = Pfsense::listarFilter($usr->codpes);
 foreach ($filter as $rule) {
-    //print_r($rule);exit;
+    //print_r($rule);//exit;
+    if (empty($rule->destination->address)) {
+        $rule->destination->address = $rule->interface;
+    }
     $tpl->filter = $rule;
     // somente as regras que não são automáticas
     if (strpos($rule->descr, 'NAT ') !== 0) {
@@ -58,7 +61,6 @@ foreach ($filter as $rule) {
 
 if ($usr->admin) {
     $tpl->access = Log::listar();
-    //$tpl->update = file_get_contents(__DIR__ . '/../log/update.log');
     $tpl->block('block_admin');
 }
 
