@@ -25,7 +25,7 @@ if (strpos($admin, $_SESSION['user']['loginUsuario']) !== false) {
 
 $usr = is_auth();
 
-$log['timestamp'] = date('Y-m-d H:i:s');
+$log['ts'] = date('Y-m-d H:i:s');
 $log['codpes'] = $usr->codpes;
 $log['name'] = $usr->nome;
 $log['from'] = $usr->ip;

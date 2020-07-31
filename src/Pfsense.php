@@ -39,15 +39,16 @@ class Pfsense
     public static function atualizarNat($usr, $associated_rule_id)
     {
         $log = array();
-        $log['timpestamp'] = date('Y-m-d H:i:s');
+        $log['ts'] = date('Y-m-d H:i:s');
         $log['codpes'] = $usr->codpes;
-        $log['new_ip'] = $usr->ip;
+        $log['name'] = $usr->nome;
 
         //echo $associated_rule_id;exit;
         foreach (SELF::listarNat($usr->codpes) as $nat) {
             if ($nat->associated_rule_id == $associated_rule_id) {
-                $log['prev_ip'] = $nat->source->address;
                 $log['target'] = $nat->destination->address . ':' . $nat->destination->port;
+                $log['prev_ip'] = $nat->source->address;
+                $log['new_ip'] = $usr->ip;
 
                 $nat->source->address = $usr->ip;
                 $nat->descr = preg_replace("/\(.*?\)/", "(" . date('Y-m-d') . ")", $nat->descr);
@@ -90,14 +91,15 @@ class Pfsense
     public static function atualizarFilter($usr, $descr)
     {
         $log = array();
-        $log['timpestamp'] = date('Y-m-d H:i:s');
+        $log['ts'] = date('Y-m-d H:i:s');
         $log['codpes'] = $usr->codpes;
-        $log['new_ip'] = $usr->ip;
+        $log['name'] = $usr->nome;
 
         foreach (SELF::listarFilter($usr->codpes) as $filter) {
             if ($filter->descr == $descr) {
-                $log['prev_ip'] = $filter->source->address;
                 $log['target'] = $filter->destination->address;
+                $log['prev_ip'] = $filter->source->address;
+                $log['new_ip'] = $usr->ip;
 
                 $filter->descr = preg_replace("/\(.*?\)/", "(" . date('Y-m-d') . ")", $filter->descr);
                 $filter->source->address = $usr->ip;

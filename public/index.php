@@ -3,6 +3,7 @@ require_once __DIR__ . '/../app/bootstrap.php';
 
 use raelgc\view\Template;
 use Uspdev\Pfconfig\Pfsense;
+use Uspdev\Pfconfig\Log;
 
 $usr = is_auth();
 
@@ -56,8 +57,8 @@ foreach ($filter as $rule) {
 }
 
 if ($usr->admin) {
-    $tpl->access = file_get_contents(__DIR__ . '/../log/access.log');
-    $tpl->update = file_get_contents(__DIR__ . '/../log/update.log');
+    $tpl->access = Log::listar();
+    //$tpl->update = file_get_contents(__DIR__ . '/../log/update.log');
     $tpl->block('block_admin');
 }
 
