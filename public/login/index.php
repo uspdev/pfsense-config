@@ -15,6 +15,9 @@ $credentials = array(
 $auth = new \Uspdev\Senhaunica\Senhaunica($credentials);
 $res = $auth->login();
 
+# salva dados do oauth em arquivo
+file_put_contents(__DIR__.'/../../log/oauth/'.$res['loginUsuario'].'.json',json_encode($res, JSON_UNESCAPED_UNICODE|JSON_PRETTY_PRINT));
+
 $_SESSION['user'] = $res;
 $_SESSION['user']['ip'] = $_SERVER['REMOTE_ADDR'];
 
